@@ -239,6 +239,7 @@
 
       <div class="tabs">
         <button class="tab" data-tab="basic" onclick="tab('basic')">기본 정보</button>
+        <button class="tab" data-tab="rules" onclick="tab('rules')">참가 규정</button>
         <button class="tab active" data-tab="booth" onclick="tab('booth')">부스 타입</button>
         <button class="tab" data-tab="promo" onclick="tab('promo')">프로모션</button>
         <button class="tab" data-tab="facility" onclick="tab('facility')">부대시설</button>
@@ -378,6 +379,38 @@
         <div class="info-box">ℹ️ 카드에는 썸네일, 구역과 기간, 주최·운영, 프로그램명, 소개, 부스 위치가 노출됩니다. 저장하면 홈페이지에 즉시 반영됩니다.</div>
       </div>
 
+      <!-- ── 탭: 참가 규정 ── -->
+      <div id="tab-rules" class="tab-body" style="display:none;">
+        <div class="toolbar">
+          <div class="subtabs">
+            <button class="subtab active" onclick="ruleTab(this,'kr')">국문</button>
+            <button class="subtab" onclick="ruleTab(this,'en')">영문</button>
+          </div>
+        </div>
+
+        <div class="group-label">규정 PDF (다운로드용)</div>
+        <div class="upload-box" style="max-width:720px; margin-bottom:20px;">
+          <div class="upload-thumb">PDF</div>
+          <div style="flex:1;">
+            <div class="upload-file" id="rule-pdf-name"></div>
+            <div class="hint" id="rule-pdf-url"></div>
+            <div class="hint">신청 폼의 "다운로드" 버튼이 이 파일을 내려받음 · PDF는 직접 제작 후 업로드 (업로드 시 OCREO CDN에 저장됨)</div>
+          </div>
+          <button class="btn btn-outline btn-sm">PDF 교체</button>
+        </div>
+
+        <div class="group-label">규정 본문 (신청 폼 텍스트 뷰어 노출)</div>
+        <div class="field full" style="max-width:860px;">
+          <textarea id="rule-text" rows="22" style="font-size:13px; line-height:1.7;"></textarea>
+          <span class="hint">참가신청 폼 1단계의 규정 뷰어에 이 내용이 그대로 노출됨 · 저장하면 홈페이지에 즉시 반영됨</span>
+        </div>
+        <div style="margin-top:16px; display:flex; align-items:center; gap:12px;">
+          <button class="btn btn-primary">저장 (홈페이지 즉시 반영)</button>
+          <span class="last-edit" id="rule-lastedit"></span>
+        </div>
+        <div class="info-box" style="margin-top:16px; max-width:860px;">ℹ️ 새 회차 생성 시 이전 회차의 참가 규정(국문, 영문 본문과 PDF)이 함께 복사됩니다. 회차명과 해약금 날짜 등은 복사 후 꼭 수정해 주세요.</div>
+      </div>
+
       <div class="footnote">
         [공통 규칙]<br>
         1. 신청 이력이 있는 항목은 삭제할 수 없으며 노출 OFF로 숨김.<br>
@@ -407,7 +440,7 @@
       <div class="field"><label>회차 <span class="req">*</span></label><input value="23"></div>
       <div class="field full"><label>장소 <span class="req">*</span></label><input placeholder="예: KINTEX 제1전시장"></div>
     </div>
-    <div class="info-box">ℹ️ 부스 타입 · 부대시설 · 프로모션 · 기간 설정이 복사됩니다.<br><strong>신청 데이터와 부스 목표는 복사되지 않습니다.</strong> 생성 후 가격과 날짜를 꼭 확인해 주세요.</div>
+    <div class="info-box">ℹ️ 부스 타입 · 부대시설 · 프로모션 · 프로그램 · 참가 규정 · 기간 설정이 복사됩니다.<br><strong>신청 데이터와 부스 목표는 복사되지 않습니다.</strong> 생성 후 가격, 날짜, 규정의 회차명을 꼭 확인해 주세요.</div>
     <div class="modal-footer">
       <button class="btn btn-outline" onclick="closeModal('modal-new-fair')">취소</button>
       <button class="btn btn-primary" onclick="closeModal('modal-new-fair')">회차 생성</button>
@@ -641,6 +674,315 @@
 </div>
 
 <script>
+  // ═══════════ 참가 규정 본문 ═══════════
+  const RULES_BIF7_KR = `부산일러스트레이션페어V.7 참가규정
+
+전시회(페어) 참가를 원하는 개인 및 기업, 조합, 학교, 기타 단체 등은 본 참가 규정에 동의해야만 참가 신청이 가능합니다. 참가 신청서 접수 시, 본 참가 규정을 확인하고 참가 규정에 동의한 것으로 간주합니다.
+
+제1조(용어의 정의)
+1. '참가 신청자'라 함은 본 전시회 참가를 위하여 참가 신청서를 제출한 개인 및 기업, 조합, 학교, 기타 단체 등을 말한다.
+2. '참가자'라 함은 주최자로부터 참가 확정 통보를 받고, 영업일 기준 7일 이내에 계약금을 입금한 개인 및 기업, 조합, 학교, 기타 단체 등을 말한다.
+3. '주최자'라 함은 주식회사 오씨메이커스를 말한다.
+4. '전시회'라 함은 주식회사 오씨메이커스가 주최하는 "부산일러스트레이션페어V.7"를 말한다.
+5. '작가 부스'라 함은 별도의 직원 없이 1인으로 활동을 하고 있는 개인 작가가 참여하는 부스를 말한다.
+6. '작가기업 부스'라 함은 본 참가규정 제2조 4항에서 정의하는 일정 수준 이상의 규모를 갖춘 개인 작가가 참여하는 부스를 말한다.
+7. '기업 부스'라 함은 본 참가규정 제2조 5항에서 정의하는 자격을 갖춘 기업 또는 단체가 참여하는 부스를 말한다.
+8. '2차적 저작물(창작물)'이라 함은 원저작물을 번역∙편곡∙각색∙변형∙영상 제작 및 그 밖의 방법으로 작성한 창작물을 말한다.
+
+제2조(참가 자격)
+1. 국내·외에서 일러스트레이션, 그림책, 독립출판, 그래픽디자인 등의 분야에서 창작 및 비즈니스 활동을 하는 개인 및 기업, 조합, 학교, 기타 단체 등이 참가할 수 있다.
+2. 참가자는 본인의 창작물과 해당 창작물을 기초로 직접 제작한 아트상품으로만 참가가 가능하며, 기업의 경우 해당 기업의 고유 제품이나 서비스, 독점적 수입품으로만 참여가 가능하다.
+3. 아래의 조건에 해당하는 경우 '작가 부스'로 참가가 가능하다.
+가. 별도의 직원 없이 1인 단독으로 활동하고 있으며, 오프라인 매장을 운영하고 있지 않은 경우
+4. 아래의 조건에 해당하는 경우 '작가기업 부스'로만 참가가 가능하다. 창작자 본인이 대표자인 경우에만 작가기업 부스로 참가할 수 있으며, 그 외의 경우 기업부스로 신청하여야 한다.
+가. 창작자 본인이 대표자이며, 본인 외 1인 이하의 직원을 두고 있는 경우
+나. 창작자 본인이 대표자이며, 1개소의 오프라인 매장을 운영하고 있는 경우
+다. 창작자 본인이 대표자이며, 사업자등록증 상 공동대표인 경우
+라. 창작자 본인이 대표자이며, 사실상 공동대표 체재로 운영되는 경우
+마. 그 밖에 주최자가 작가기업으로 판단하여 작가기업 부스로 참가를 요청하는 경우
+5. 아래에 해당하는 경우 '기업 부스'로만 참가가 가능하다.
+가. 제2조 3항, 4항에 해당되지 않는 개인 또는 기업(개인사업자 및 법인사업자)
+나. 사단법인, 재단법인, 학교법인, 동호회, 학원
+다. 창작자 본인이 대표자이나 2개소 이상의 오프라인 매장을 운영하고 있는 경우 또는 본인 외 2인 이상의 직원을 두고 있는 경우
+라. 그 밖에 주최자가 기업으로 판단하여 기업 부스로 참가를 요청하는 경우
+6. 아래의 경우 참가가 불가하다.
+가. 제3자의 작품 또는 지적 재산권을 침해하거나 도용, 표절한 작품으로 참여하는 경우
+나. 과거 5년내에 제3자의 작품 또는 지적 재산권을 도용한 이력이 명백히 확인되거나, 또는 해당 사유로 고소, 고발을 당한 이력이 있는 경우. 단, 지적 재산권 도용이 아닌 것으로 법원의 판결을 받은 경우는 참가 가능
+다. 본인의 창작물 없이 2차적 저작물(창작물)로만 참가하는 경우
+라. 참가 기업의 자체 브랜드(자체 생산 또는 독점 수입)가 없는 단순 유통 판매사인 경우
+마. 참가 기업의 자체 디자인이 아닌 외부 작가/디자이너의 아트상품만 제조, 판매하는 경우
+바. 참가자의 전시품이나 참가자의 행위가 위법의 소지가 있거나 미풍양속을 저해하는 것으로 판단되는 경우
+사. AI를 이용하여 만든 작품 또는 생성물 및 이를 기반으로 한 상품
+아. 주최자가 지정한 참가 분야에 해당하지 않는 품목이나 전시회 성격에 부합되지 않는 제품 또는 서비스로 참가하고자 하는 경우
+자. 과거 5년내에 본 행사의 참가 규정을 위반하여 주최자로부터 참가 제한을 통보 받은 경우
+차. 단, 상기의 경우라도 사전에 주최사의 승인을 받은 경우에는 참가 가능
+
+제3조 (참가 신청)
+1. 참가 신청을 원하는 자는 전시회 공식 홈페이지에 게시된 참가 안내 요강 및 규정을 확인한 후, 참가 신청서를 작성하여 제반 서류와 함께 제출하여야 한다.
+2. 참가자는 제2조(참가자격)를 확인하여 본인의 참가 자격에 합당한 부스로 참가 신청을 하여야 한다. 만약 참가 자격에 맞지 않는 부스를 신청하여 해당 사항이 확인되는 경우 참가가 취소될 수 있으며, 해약금 규정에 따라 해약금을 지불하여야 한다. 또한 전시회가 종료된 이후에라도 해당 사실이 확인되는 경우 참가비를 소급 적용하여 납부하여야 한다.
+3. 참가 신청 시 1인(기업) 1부스 이상 신청이 원칙이며, 반드시 참가 신청한 본인(기업)이 직접 참가하여야 한다. 단, 작가를 대행하는 에이젼시 또는 작가 그룹으로 참여하는 경우 에이젼시 기업 또는 그룹을 대표하는 개인 또는 기업이 신청을 대신할 수 있다.
+4. 주최자는 참가 신청자가 제출한 참가 신청서와 포트폴리오 사이트 등의 내용에 이상이 없는지 기본 요건을 확인하고, 기본 요건에 이상이 없는 참가 신청자를 대상으로 작품의 독창성, 포트폴리오 사이트 관리, 작품 스타일, 활동 경력, 신청 순서 등을 고려하여 참가 확정 여부를 개별 통보한다.
+5. 주최자는 참가 신청자에게 참가 자격 확인을 위해 필요한 추가 자료를 요구할 수 있으며, 자료 요구를 받은 참가 신청자는 지체 없이 해당 자료를 제출하여야 한다. 만일 제출을 거부할 경우 주최자는 참가 신청을 거부할 수 있다.
+6. 참가 신청자가 참가 확정 통지를 받은 날로부터 영업일 기준 7일 이내에 참가비의 50%를 계약금으로 납입하여야 참가 계약이 성립된 것으로 본다. 만약 기한 내에 계약금을 납부하지 않는 경우 참가가 자동 취소된다.
+7. 참가자는 이미 제출한 참가 신청서 등 기타 제출 서류의 내용에 변동 사항이 발생한 경우 또는 참가 자격에 변동(기존 개인 작가에서 작가기업 또는 기업으로의 변동 등)이 발생한 경우 즉시 주최자에 통보하여야 하며, 미통보로 인한 불이익에 대해서는 참가자 본인이 책임을 진다.
+
+제4조 (참가 신청 반려)
+주최자는 아래의 경우 참가 신청 접수를 반려 또는 거부할 수 있다.
+1. 전시장 면적이 소진된 경우
+2. 참가자가 참가 신청서 상의 내용을 허위로 작성한 경우
+3. 참가 신청자의 작품이 제3자의 작품을 도용, 표절한 것으로 의심되는 경우
+4. 참가 신청자의 작품이 AI를 이용하여 제작된 작품이거나 생성물로 의심되는 경우
+5. 참가자가 관련 분야에서 활동하는 창작자로 볼 수 없는 경우
+6. 참가 신청서 상의 기재사항을 누락하거나 포트폴리오 사이트를 제출하지 않은 경우
+7. 참가자의 전시품이나 참가자의 행위가 위법의 소지가 있거나 미풍양속을 저해하는 것으로 판단되는 경우
+8. 제2조 각 항에서 규정한 "참가자격"에 미달하거나 참가 불가 사유에 해당하는 경우
+9. 참가자격 조건 상 작가기업 부스 또는 기업 부스로 신청해야 할 참가자가 작가부스로 참가 신청을 하였을 경우
+10. 주최자가 요청한 추가 서류 제출을 거부하는 경우
+11. 과거 5년내 참가 규정을 위반하여 사무국으로부터 참가 제한 결정을 받은 경우
+12. 참가자가 주최자의 운영 방식에 협조하지 않아 전시회 운영에 크게 차질을 빚을 것으로 판단되는 경우
+13. 신청일 기준 참가자가 만 19세 미만의 미성년자인 경우
+14. 기타 각 호에 준하여 참가자의 전시회 참가가 적절하지 않다고 판단되는 경우
+
+제5조 (참가 취소 및 유보)
+아래의 규정을 위반한 사실이 확인된 경우 주최자는 참가자의 동의 없이도 참가 신청 접수를 취소하거나 유보할 수 있으며 전시 기간 중 부스를 철수할 수 있다. 이 경우 참가비는 반환되지 아니한다. 또한 규정을 위반한 참가자는 주최자의 내부 규정에 따라 일정 기간 전시회 참가가 제한된다.
+1. 참가 신청한 본인(기업) 외 타 작가(기업)와 부스를 함께 사용하거나, 제3자에게 부스를 양도하는 경우
+2. 참가자 본인의 작품이나 직접 제작한 아트상품이 아닌, 제3자의 작품이나 일반 공산품 등을 전시, 판매, 홍보하는 경우 (기업 또는 작가의 협찬 제품 및 서비스도 이에 해당한다.)
+3. 기업의 경우 해당 기업의 제품이나 상품이 아닌, 타 기업의 제품이나 상품을 전시, 홍보하는 경우
+4. 주최자가 공지한 전시회 운영 규정을 위반하여 전시회 운영을 방해하거나 다른 참가자와 관람객에게 피해를 주는 경우
+5. 전시 기간을 포함한 어떠한 때라도 참가자의 참가 자격에 문제가 있거나 참가자가 전시회의 이미지를 심각하게 훼손할 수 있다고 판단되는 경우
+6. 참가자의 작품 또는 아트상품에 대해 도용, 카피(트레이싱 포함), 저작권 위반 등의 제3자의 문제 제기가 있고, 사무국의 검토에 따라 참가에 문제가 된다고 판단되는 경우
+7. 참가자의 위법적인 행위에 대해 제3자의 문제 제기가 있고, 사무국의 검토에 따라 참가에 문제가 된다고 판단되는 경우
+8. 기타 각 호에 준하여 참가자의 전시회 참가가 적절하지 않다고 판단되는 경우
+
+제6조 (작품 도용 및 표절, 2차적 저작물)
+1. 참가자는 반드시 자신의 창작물과 해당 창작물을 기초로 직접 제작한 아트상품으로만 참가하여야 하며, 타인의 작품을 도용, 표절하는 등 제3자의 지적 재산권을 침해한 작품이나 AI를 이용하여 생성한 작품이나 상품으로는 참가할 수 없다.
+2. 2차적 저작물(창작물)로만 참가하는 것은 불가하며, 2차적 저작물과 2차적 창작물을 활용한 아트상품을 전시 또는 판매할 경우 원작자의 허락을 받은 경우에만 가능하고 참가자는 사전에 관련 증빙 서류를 사무국에 제출하여야 하며, 증빙 서류를 제출하지 않아 발생하는 모든 문제의 책임은 참가자 본인에게 있다.
+3. 전시 기간을 포함한 어떠한 때라도 참가자의 작품이 제3자의 지적 재산권을 침해하였거나 원작자의 허락을 받지 않은 2차적 저작물(창작물)을 전시 또는 판매하여 문제가 발생하였을 경우 모든 법적인 책임은 참가자에게 있으며, 주최자는 해당 참가자의 참가를 즉시 취소할 수 있고, 만약 이로 인하여 손해가 발생하는 경우 참가자에게 손해 배상을 청구할 수 있다.
+4. 전시기간 중 타인의 작품을 도용, 표절하는 등 제3자의 지적 재산권을 침해한 작품이거나 원작자의 허락을 받지 않은 2차적 저작물(창작물)을 전시, 판매한 사실이 확인될 경우 주최자는 즉시 해당 부스를 철거할 수 있으며, 참가자는 어떠한 손해 배상도 청구할 수 없다.
+5. 타인의 작품을 도용, 표절하는 등 제3자의 지적 재산권을 침해한 작품이나 2차적 저작물(창작물)로 전시회에 참가한 경우 해당 참가자는 향후 5년간 참가가 제한되며, 이에 대해 어떠한 이의도 제기할 수 없다.
+
+제7조 (전시 면적 배정)
+1. 주최자는 참가비 납입이 완료된 참가자에 한하여 참가 분야, 참가 목적, 전시품의 성격, 이전 전시회 참가횟수, 신청 면적, 참가 신청 순서 및 기타 합리적인 방법에 의거하여 전시부스를 배정하며, 참가자는 부스 배정과 관련하여 이의를 제기할 수 없다.
+2. 주최자는 효율적인 전시장 구성을 위해 참가자에게 기 배정된 부스 위치의 변경을 요청할 수 있으며, 참가자는 이에 협조하여야 한다. 또한 부스 위치 변경에 대해 참가 취소나 보상 등의 이의를 제기할 수 없다.
+3. 주최자의 사전 승낙 없이 배정받은 전시 면적의 일부 또는 전부를 제3자에게 양도, 전대하거나 상호 간에 교환할 수 없다.
+
+제8조 (전시장 사용 시간)
+1. 전시장의 사용시간은 오전 9시부터 오후 6시까지로 한다. 주최자가 수락한 사용시간 외에 추가 작업이 필요한 참가자는 반드시 사전에 주최자와 협의하여야 하며, 이 경우 주최자는 해당 참가자에게 추가 전시장 사용료를 청구할 수 있다.
+
+제9조 (설치 및 철거)
+1. 설치 및 철거는 주최자가 규정한 시간을 준수하여 진행 및 완료되어야 하며, 참가자는 철거된 모든 장치물과 전시품을 수거해야 한다. 만일 참가자의 귀책사유로 철거 지연에 따른 손실이나 전시장 손상이 발생할 경우 주최자는 참가자에게 손해 비용을 청구할 수 있으며, 참가자는 주최자에게 그 손해를 배상하여야 한다.
+2. 만일 참가자가 전시품이나 관련 설치물을 정해진 기간 내에 철거하지 않은 경우, 해당 설치물은 폐기되며, 관련하여 발생하는 모든 비용은 참가자가 지불하여야 한다.
+3. 모든 장치 공사는 벡스코에 등록된 용역 업체 중에서 선정하여 진행하여야 한다.
+
+제10조 (정보 제공)
+1. 참가자는 주최자가 부스 내 장치 및 활동이 규정에 부합하는지 그 여부를 파악할 수 있도록 전시품 및 장치 공사 시공에 관한 자료와 전시회 홍보에 필요한 정보를 주최자에게 제공하여야 한다. 만일 참가자가 주최자의 정보 제공 요청을 거부할 경우 주최자는 참가 계약을 해지할 수 있으며, 기 납입된 참가비는 반환하지 아니한다.
+2. 참가자는 주최자가 참가 자격 확인을 위해 필요한 추가 정보를 요청할 경우 해당 정보를 제공하여야 한다. 만일 참가자가 주최자의 정보 제공 요청을 거부할 경우 주최자는 참가 계약을 해지할 수 있다.
+3. 참가 신청을 위해 참가자는 개인 정보 수집과 활용에 동의하여야 하며, 주최자는 참가 신청 시 참가자가 제출한 작품의 이미지와 정보(이름 등 개인 정보 포함)를 홍보 및 마케팅의 목적으로 이용할 수 있다. 만일 참가자가 자신의 작품과 정보가 홍보 및 마케팅 목적으로 사용되는 것을 원치 않을 경우, 주최자에게 사전에 통보하여야 한다.
+
+제11조 (보안 및 안전)
+1. 주최자는 참가자 및 관람객의 안전을 위하여 적절한 조치를 취하여야 한다.
+2. 전시기간 및 사전 준비, 사후 철거 기간 중 발생하는 참가자 전시품의 훼손, 분실, 도난에 대한 관리 책임은 참가자에 있다.
+3. 장치물 및 전시장 내의 모든 자재는 소방 및 안전 법규에 따라 적절한 불연 처리가 되어야 한다. 주최자는 안전에 위협을 주는 장치와 시공 작업 및 실연을 제한할 수 있고, 필요에 따라 참가자에게 화재방지와 관련한 시정을 요구할 수 있다.
+4. 참가자가 고의 또는 과실로 화재, 도난, 파손, 기타 사고를 발생케 하여 주최자 또는 타인에게 손해를 입힌 때에는 참가자가 배상 책임을 지며 전시품 등에 대한 보험 가입 역시 참가자의 책임으로 한다.
+
+제12조 (진열 및 관리)
+1. 참가자의 전시품 설치 및 활동은 신청한 부스 바닥과 벽체 면적을 벗어날 수 없으며, 부스 바닥과 벽체 면적을 벗어난 경우 주최측의 요청에 따라 전시품의 위치를 변경하여야 한다. 만일 요청을 따르지 않을 경우 주최자는 참가자의 전시 전부에 관하여 즉시 중지, 철거를 명할 수 있다.
+2. 참가자가 참가 신청서에 명시한 전시품과 상이한 물품을 전시하거나 전시회의 성격에 부합하지 않는 물품을 전시할 경우 주최자는 즉시 중지, 철거, 또는 반출을 명할 수 있다.
+3. 참가자는 주최자가 지정한 기간 내에 전시품 설치를 완료하여야 하며, 특별한 사유가 없는 한 전시장 오픈 및 종료 시간을 준수하여야 한다.
+4. 참가자는 부스 운영을 진행할 때 주변 부스에 피해를 주지 않아야 한다. 피해를 가하는 소음(마이크사용, 음악송출 등), 전시품 및 홍보물의 부스 이탈 등 주변 부스에 피해를 끼치는 경우 주최자는 시정 요구를 할 수 있으며 참가자는 이를 즉시 시정하여야 한다.
+5. 이벤트를 진행할 경우 반드시 부스 내에서 진행하여야 한다. 단, 부스 내에서 이벤트 진행이 어렵다고 판단되는 경우 사전에 주최자와 협의하여 허락을 받아야 한다. 만일 이벤트 진행으로 인해 주변 부스에 피해를 줄 경우 이벤트 진행을 즉시 중단하여야 하며, 이를 따르지 않을 경우 주최자는 강제로 이벤트를 중단시킬 수 있다.
+6. 본 조의 각 항 및 기타 참가자의 진열 및 관리상 문제로 주최자가 참가자의 전시 중지 또는 철거를 명하는 경우 기 납입된 참가비는 반환하지 아니하며, 참가자는 주최자의 중지, 철거 등의 요구로 인한 손해 배상을 청구할 수 없다.
+7. 참가자는 사전에 신청한 부스 및 부대시설 등을 검수할 의무가 있다. 사전에 신청한 부스의 형태, 사이즈 및 부대 시설에 문제가 있을 경우 즉시 주최자에 시정 요청하여야 한다. 전시품 설치가 완료된 이후에는 시정을 요구할 수 없으며, 발생하는 모든 문제의 책임은 참가자 본인에게 있다.
+
+제13조 (위험 부보)
+1. 참가자는 전시 스탠드 및 전시품의 도난 및 훼손, 부스내에서 발생하는 개인 상해에 대하여 전적인 책임을 부담하고 주최자에게 이에 대한 보상을 청구할 수 없다.
+2. 참가자는 전시 기간은 물론 사전 설치 및 사후 철거 기간 동안 모든 기자재 및 전시품에 대하여 보험에 부보할 수 있다.
+
+제14조 (일부 사용 취소 및 계약의 해지)
+1. 참가자가 배정된 전시 부스의 전부 또는 일부의 사용을 거부하거나 참가비를 기한 내에 납부하지 않을 경우, 주최자는 14일 이상의 기간을 정하여 서면으로 그 이행을 최고하고 참가계약을 해지할 수 있다. 이 경우 기 납입된 참가비는 반환하지 아니하며, 참가 계약 해지 시점에 발생하는 해약금보다 기 납입된 참가비 부족시에는 추가 납입하여야 한다.
+2. 참가자는 배정받은 전시 면적의 전부 또는 일부를 타인에게 양도할 수 없으며, 위반시 주최자는 참가 계약을 해지할 수 있다. 이 경우 기 납입된 참가비는 반환하지 아니한다.
+3. 주최자는 참가자가 제출한 서류에서 허위의 사실이 발견되거나 참가 조건에 위배된 사항이 있을 경우 즉시 참가 계약을 해지할 수 있다. 이 경우 기 납입된 참가비는 반환하지 아니한다.
+4. 주최자는 참가자가 참가 조건을 위반하거나 참가 규정을 위반함으로써 직접 입은 손해나 피해는 물론 이를 원인으로 한 참가 계약 해지 또는 기타 전시 중지, 철거 명령 등으로 발생하는 제반 손해나 피해에 대해서는 책임을 지지 아니하며, 참가 규정 위반으로 인해 전시품을 철거할 경우에 발생되는 비용은 참가자가 부담해야 한다.
+5. 참가자의 사정에 의한 참가 취소(참가 계약 해지)시 다음 각 호에 정해진 해약금을 참가를 포기한 시점으로부터 14일 내에 주최자에게 지불하여야 한다. 단, 기 납입된 참가비는 동 해약금으로 우선 차감하며, 부족 시 추가 납입하여야 하고 잉여 시 반환한다. 이때 해약금은 할인, 프로모션, 특별 조건 등의 적용 여부와 관계없이, 부스비 기본 단가(정가)를 기준으로 산정한다.
+가. 2026년 5월 9일까지 취소: 해약금 없음
+나. 2026년 5월 10일 ~ 7월 8일까지 취소: 부스비의 20% 해약금 납입
+다. 2026년 7월 9일 ~ 8월 7일까지 취소: 부스비의 40% 해약금 납입
+라. 2026년 8월 8일 ~ 9월 6일까지 취소: 부스비의 60% 해약금 납입
+마. 2026년 9월 7일 ~ 10월 6일까지 취소: 부스비의 80% 해약금 납입
+바. 2026년 10월 7일 이후 취소: 부스비의 100% 해약금 납입
+
+제15조 (전시회의 취소 또는 변경)
+1. 주최자는 아래의 원인에 의해 참가자에게 발생한 손실과 비용 및 기타 손실에 대하여 일체 책임을 지지 않으며, 전시회를 축소하거나 전시 기간을 변경할 수 있다. 이 경우 참가자는 주최자에게 보상을 청구할 수 없다.
+가. 화재, 참사, 홍수, 질병, 감염 위험, 유행병(코로나 바이러스 등), 지진, 폭발이나 사고, 봉쇄, 금지령, 냉혹한 기후, 정부의 제한, 공공의 적의 행위, 폭동이나 민간인 소요 사태나 동란, 테러 행위 또는 기타 유사한 행위, 파업, 폐쇄, 보이콧이나 기타 노동 분쟁 또는 소요, 전시에 필요한 시설 부재, 적절한 운송 시설의 장애, 필수적인 장비나 물품의 확보 불가 또는 사법적인 판단이나 법률, 법령, 규칙, 명령, 판결의 경우
+2. 상기 불가항력적 원인 및 기타 주최자의 귀책사유가 아닌 특별한 사정으로 전시회가 취소되는 경우 주최자는 변제해야 할 필요가 있는 모든 경비(임대료, 홍보비, 인쇄비 등)를 공제한 후 잔액만 참가비의 비율대로 참가자에게 환불한다. 단, 전시회가 취소되기 이전에 참가자가 자발적으로 참가 취소를 한 경우 해당 참가자는 환불 대상에서 제외한다.
+3. 정부, 공공기관 등이 불가항력 사실을 증명하고, 전시회 개최 30일 이전까지 불가항력적 사실이 유효할 경우, 주최자는 즉시 공식 취소 발표를 한다. 단, 공식 취소 발표 이전에 참가자가 취소할 경우에는 참가비를 반환하지 아니한다.
+
+제16조 (개인정보 처리 동의)
+1. 참가신청을 위해 참가자는 개인정보 수집과 활용에 동의하여야 하며, 주최자는 참가 신청 시 제공되는 참가자의 정보(이름, 전화번호, 주소, 휴대전화번호, 이메일, 웹사이트, SNS주소, 회사명, 부서, 직책, 그 외 작성 항목)를 수집한다.
+2. 주최자는 수집한 위 개인 정보를 차기 전시회 홍보, 전시회 참가 의사 확인, 참가자 본인 확인, 공지 사항 전달의 목적으로 활용할 수 있다. 만일 참가자가 본인의 정보 이용을 거부하고자 할 때에는 개인정보 열람, 정정, 삭제를 요구할 수 있다.
+3. 주최자는 수집한 개인 정보를 제공일로부터 5년간 보관한다.
+
+제17조 (초상권 사용 동의)
+1. 전시기간 중 촬영되는 사진 및 영상에 대한 참가자 초상권과 부스 사진은 전시회 홍보를 위해 사용될 수 있음에 동의한 것으로 간주한다. 초상권의 사용은 결과보고서, 인쇄 홍보물, 영상 홍보물, 홈페이지, 뉴스레터, 온라인 SNS 플랫폼 등 본 전시회 홍보에 한정된다.
+
+제18조 (보충 규정)
+1. 참가자는 "부산일러스트레이션페어V.7" 참가 규정과 벡스코의 제규정을 준수하여야 한다.
+2. 전시회의 운영과 관련된 모든 권한은 주최자에게 있으며, 주최자는 안전하고 효율적인 전시회 운영을 위한 모든 결정 권한을 갖는다. 참가자는 이에 대해 이의 제기를 할 수 없다.
+3. 주최자는 필요한 경우 본 규정을 개정 또는 추가할 수 있으며, 개정 또는 추가되는 규정은 참가자에게 공시되는 순간부터 참가 규정의 일부가 되어 참가자에게는 이를 준수할 의무가 발생한다.
+
+제19조 (분쟁 해결)
+1. 본 참가 규정의 관하여 주최자와 참가자 간에 발생하는 분쟁 및 기타 쌍방의 권리 및 의무에 관한 분쟁은 부산 소재 대한 상사 중재원의 중재 판정에 따르며 그 판정에 대해서는 법원에 제소할 수 없다.`;
+
+  const RULES_BIF7_EN = `The Busan Illustration Fair V.7 Terms and Conditions
+
+Any Individuals, companies and organizations who wish to participate in the exhibition must agree to this Terms and Conditions. Upon receipt of the application, the BIF Office considers that applicants agree and accept to participation Terms and Conditions.
+
+Article 1 (Definition of Terms)
+1. 'Applicant' refers to an individual, company, institution or group which has submitted their application form.
+2. 'Participant' refers to the exhibitors, such as an individual, company, institution or group which has paid their participation fee within 7 days of their participation invoice.
+3. 'Organizer' refers to OC MAKERS.
+4. 'Fair(Exhibition)' refers to 'Busan Illustration Fair V.7' organized by OC MAKERS.
+5. 'Individual Artist Booth' refers to a participant who is an individual artist with no other employee.
+6. 'Company Booth' refers to a participant who is a company/group/organization qualified as defined in Paragraph 4 of Article 2 in this Terms and Conditions.
+7. 'Secondary Creation' refers to a artwork that is produced/translated/arranged/varied/modified/video-produced from an original artwork.
+
+Article 2 (Qualifications)
+1. Any individual or group, company and organization who is engaged in creative activities in the field of illustration, picture book, graphic design, independence publishing or related fields can participate.
+2. Participants can only participate in their own creations and art products produced based on the primary creations, and companies can only participate with their own products, services, and exclusive imports.
+3. If you meet the condition below, you are eligible as an 'Individual Artist'.
+a. An artist who is acting individually
+b. An artist who has 1 employee or 1 off-line shop
+4. If you meet the conditions below, you must participate as 'Company'.
+a. An individual or company(Private operator or Corporate business owners) that do not meet the conditions in Paragraph 3 of Article 2 in this Terms and Conditions
+b. Organization, group, school/university or company
+c. An artist who runs 2 or more off-line shops
+d. An artist who has 2 or more employees
+e. Whom the organizer considers as company
+5. If you meet the conditions below, you cannot participate in the exhibition.
+a. Whose artworks that infringe or plagiarize other people's intellectual property rights
+b. Who has a clear history of stealing a third party's artwork or intellectual property rights or has a history of being sued or accused for such reasons within the past 5 years
+c. Who exhibits only with secondary creation without any original artwork
+d. Companies that are only distributors, which are not exclusive importer or manufacturer
+e. Companies that only sell goods of other artists or designers that designs are not their own creation
+f. If it is judged that a participant's artwork may offense against public morals or cause a repugnance to visitors
+g. Who exhibits with products or services that does not conform with the exhibit area of exhibition or to the nature of the exhibition
+h. Who has been notified of participation restrictions by the organizer for violating the participation regulations within the past 5 years
+
+Article 3 (Application)
+1. Those who wish to participate in the exhibition must apply for participation after signing up for membership on the official website(www.ocreo.kr).
+2. Those who wish to apply for participation shall check the guidelines and regulations for participation posted on the official website of the exhibition before applying and submit the application form and all documents accordingly.
+3. A participant should apply for a booth appropriate for his/her qualification. If it is revealed that a participant has applied for an inappropriate booth, the participation may be cancelled and the cancellation fee shall be charged in accordance. In addition, if the corresponding factor is revealed after the exhibition is over, the cancellation fee may be applied retrospectively.
+4. When applying for participation, it is a principle to apply for at least one booth per person (company), and the person who applied for participation must participate in it.
+5. The organizer shall check the basic requirements of the participants' application form and portfolio website, and notify the participants who are not affected by the basic requirements individually whether to confirm participation considering the originality, portfolio website, field of participation, experience, and application order etc.
+6. The organizer may request the participant to provide additional materials necessary to verify the qualifications of participation, and the participant who receives the request for the materials shall submit the relevant documents without delay. If the submission is refused, the organizer may refuse to apply for participation.
+7. 50% of the participation fee must be paid as a down payment within 7 business days from the date of receipt of the notice of confirmation of participation. If the down payment is not paid within the deadline, the participation will be automatically canceled.
+8. Participants shall immediately notify the organizer of any change in the contents of the submitted documents, such as the application for participation already submitted, and participants shall be responsible for any disadvantages caused by any unannounced notice.
+
+Article 4 (Refusal of Application)
+Organizer has a right to return or refuse the application in the following cases.
+1. If exhibition area is all sold out.
+2. If contents of the application form is filled with false information.
+3. If artwork of the applicant is suspected of theft and plagiarism of a third party's artwork.
+4. If a participant's submitted work is created using AI or is suspected to be an AI-generated creation.
+5. If an applicant cannot be considered as a creator of the relevant field.
+6. If an applicant missed out mandatory contents in the application form or did not submit a portfolio website.
+7. If it is judged that a participant's artwork may offense against public morals or cause a repugnance to visitors.
+8. If an applicant fails to meet the qualifications specified in each paragraph of Article 2.
+9. If an applicant, who is required to apply for an artist company or company booth under the Terms and Conditions, has applied as an individual artist booth.
+10. If an applicant refuses to submit documents the organizer requires.
+11. If an applicant who has been decided to be restricted from participation by the organizer due to violation of the Terms and Conditions within the past 5 years.
+12. If it is deemed that the operation of the exhibition will be severely disrupted by the applicant's uncooperative behavior.
+13. If an applicant is under 19 on the date of application.
+14. If it is deemed inappropriate to participate in accordance with each of the other subparagraphs.
+
+Article 5 (Cancellation and Suspension of Application)
+Organizer has a right to cancel or suspend the application or withdraw the booth during the fair if it has been found that participant has violated following rules. In this case, the participation fee shall not be refunded to participant. In addition, those who have violated the rules will not be able to participate for a period of time in accordance with organizer's internal regulations.
+1. If a participant uses the booth with an artist or company other than the participant who applied for participation, or transferring the booth to a third party.
+2. If a participant exhibits, sells, or promotes third-party's artworks or general industrial products(including sponsored products and services) other than the participant's own artwork or art products.
+3. In the case where a company exhibits or promotes a product of another company.
+4. If a participant violates the exhibition regulations and obstructs the operation of the exhibition or causes harm to other participants/visitors.
+5. If there is a problem with the participant's qualifications at any time, including the period of the exhibition, or if it is deemed that the participant may seriously damage the image of the exhibition.
+6. If there is a problem raised by a third party regarding the participant's artwork or art product, such as theft, copying(including tracing), copyright violation, etc., and is deemed to be a problem with participation according to the review of the organizer.
+7. If there is a problem raised by a third party regarding the participant's illegal behavior and is deemed to be a problem with participation according to the review of organizer.
+8. If it is determined that the participant's participation in the exhibition is not appropriate in accordance with any other provisions.
+
+Article 6 (Theft and Plagiarism of Artwork, Secondary Creation)
+1. Participants must participate only in their own creations and art products based on their own creations, and must not participate in exhibition with artworks that violate third parties' intellectual property rights, such as stealing and plagiarizing other people's artworks.
+2. Participant cannot participate with secondary creation. If the participant wants to participate with secondary creation, the participant must submit verification documents that indicate the secondary creation has been approved by original artists in advance. The participant is responsible for any problems caused by not submitting the documents.
+3. At any time, including the period of exhibition, if a participant's artwork infringes on the intellectual property rights of a third party or if a problem arises from the display or sale of a secondary creation(creative artwork) without the permission of the original artist, participant shall be liable for all legal responsibilities, and the organizer may immediately cancel the participant's participation, and the organizer may claim compensations if the damage arises from it.
+4. When it is found that participants' artwork infringes on a third party's intellectual property rights, such as stealing or plagiarizing, during the exhibition period, the organizer may immediately remove the booth and the participant may not claim any damages.
+5. When it is found that participants' artwork infringes on a third party's intellectual property rights, such as stealing or plagiarizing, or is a secondary creation without permission, the participant will be restricted from participating in Busan Illustration Fair for the next 5 years and will not raise any objections to it.
+
+Article 7 (Booth Allocation)
+1. The organizer shall allocate booths based on the field of participation, the purpose of participation, the personality of the exhibition item, the number of participation for previous exhibitions, the number of booth, the order of application, and other reasonable reasons, and participants may not object to the allocation of booths. The booth allocation shall only be announced to participants who have completed the payment of participation fees.
+2. Organizer may request participants to change the location of booths assigned in advance for the efficient exhibition hall organizing, and participants shall cooperate therewith. In addition, participants cannot object such as cancellation of participation or compensation for changing the location of the booth.
+3. Without approval of the organizer, participants shall not transfer, sublease or exchange their booth and exhibition area to a third party.
+
+Article 8 (Exhibition Hall Hours)
+1. Exhibition hall is allowed to be used from 9 a.m. to 6 p.m. If it is needed to be opened after or before the hour organizer allowed, participants must apply for using exhibition hall and pay for extra fee.
+
+Article 9 (Installation and Move-out)
+1. Booth installation and move-out must be done and completed by the time that organizer stated and participants shall be responsible for all dismantling of exhibits and booth construction. If any damages caused by delay of booth installation or move-out, participant must compensate for these damages to organizer.
+2. If the participant do not move out the exhibits or related installations within the specified period of time, the installations shall be discarded and all expenses should be paid by the participant.
+3. Booth installation should be selected and done from among service providers registered at BEXCO.
+
+Article 10 (Submission of Information)
+1. The organizer shall be provided with the information necessary to install exhibits and promote the exhibition, so that the organizer is allowed to determine if exhibits and promotional activities in the booth are in compliance with the regulations. If the participant refuses to fulfill the demand of the organizer, participation of the participant may be terminated by the organizer and the paid participation fee shall not be returned.
+2. Participant shall provide the information if the organizer requests when it is deemed to be necessary to verify the qualification. If the participant refuses to submit, the organizer will cancel participation of participant.
+3. Participant shall agree to the collection and utilization of their personal information and also agree that the organizer has a right to use their artworks and personal information submitted by the participant upon application, for the purpose of marketing and promotion. If participants do not want their personal information used for the purpose of marketing and promotion, the participant should notify the organizer in advance.
+
+Article 11 (Security and Safety)
+1. The organizer shall take appropriate measures for the safety of participants and visitors.
+2. Participants are responsible for the management of damage, loss, and theft of their exhibits during the exhibition period, installation and move-out period.
+3. Equipment and all materials of the exhibition hall shall be properly treated in accordance with fire-fighting and safety regulations. The organizer may restrict construction work and demonstration of devices that pose a safety threat. If necessary, the organizer may request participants to correct the fire prevention.
+4. If a participant intentionally or negligently causes fire, theft, damage, or other accident and causes damage to the organizer or other person, the participant shall be liable for compensation, and the participant shall also be responsible for insurance for the exhibits.
+
+Article 12 (Display and Booth Management)
+1. Installation and activity of participant should not deviate from the provision booth floor and wall area, if not, the display shall be repositioned according to the instructions of the organizer. If the participant does not follow the instruction, the organizer may immediately order a suspension or demolition of all participants' exhibitions.
+2. If the participant exhibits items that differ from those specified in the application form or items that do not conform to the nature of the exhibition, the organizer may immediately order a halt or removal.
+3. Participants shall complete the installation of the exhibits within the period designated by the organizer and observe the opening and closing time of the exhibition hall unless there is a special reason.
+4. Any events by participant must be hosted in participants' booths. If an event causes damage to nearby booths, the event must be stopped immediately, or the organizer may force the event to stop.
+5. If the organizer orders the suspension or removal of the participant's exhibition due to display and management issues based on the Article 12, the paid participation fee shall not be returned, and the participant cannot claim damages due to the organizer's request for suspension or removal.
+
+Article 13 (Responsibility)
+1. Participant is fully responsible for damage, theft and loss for their exhibit items or any other injuries and cannot claim any of these compensations to organizer.
+2. Participants may supplement all equipment and exhibits with insurance during the exhibition period as well as the pre-installation and post-removal period.
+
+Article 14 (Termination of the Agreement and Cancellation Penalty)
+1. If participants do not pay the participation fee within the designated period, 14-day-notice will be given to them to make the payment and still if the payment is not made, organizer has the right to cancel the exhibition contract. In this case, participant is not entitled to refund.
+2. Participant cannot transfer the assigned booth area or any portion of it to a third party, and if participants breach this term, the participation can be cancelled and the fee will not be subject to refund.
+3. Organizer has a right to cancel participation of participants when it is found that there is breach of terms and conditions or any false information. In this case, the participation fee will not be subject to refund.
+4. The organizer shall not be responsible for any damages incurred by the participants in violation of the participation conditions or the rules, as well as any damages caused by the cancellation of the participation contract or other suspension or demolition order. Participants shall bear the costs incurred in removing the exhibits due to violation of the participation regulations.
+5. In case the participant cancels or refuses the whole or partial space which is already registered due to own reason, the participant shall inform organizer in document and pay the designated penalty within 14 days of participation cancellation. Penalty is deducted from the paid participation fee, if no sufficient, the participant shall pay additionally and if surplus, the balance will be refunded. The cancellation fee shall be calculated based on the standard booth fee (list price), regardless of any discounts, promotions, or special conditions.
+a. Cancellation until May 9, 2026 : 100% refund
+b. Cancellation from May 10 to July 8, 2026 : 20% of total participation fee
+c. Cancellation from July 9 to August 7, 2026 : 40% of total participation fee
+d. Cancellation from August 8 to September 6, 2026 : 60% of total participation fee
+e. Cancellation from September 7 to October 6, 2026 : 80% of total participation fee
+f. Cancellation from October 7, 2026: 100% of total participation fee
+
+Article 15 (Cancellation or Modification of Exhibition)
+1. The organizer shall not be liable for any losses, expenses or other losses incurred to the participants due to the following causes, and may reduce the exhibition or change the duration of the exhibition. In such cases, the participant cannot claim compensation from the organizer.
+a. Fire, disaster, flood, disease, risk of infection, pandemic(COVID-19 etc.), earthquake, explosion or accident, lockdown, ban, harsh climate, government restrictions, public enemy actions, riots or civil unrest or disturbance, terrorist actions or other similar actions, strikes, closures, boycotts or other labor disputes or disturbances, absence of facilities necessary for the exhibition, failure of adequate transportation facilities, inability to secure necessary equipment or goods, or judicial judgment or law, statutes, rules, orders, judgments
+2. In the case that the exhibition is cancelled due to reasons of a 'force majeure' nature or other reasons attributable to the organizer, the organizer shall refund only the balance to the participants according to the ratio of the participation fee after deducting all expenses (rents, promotional expenses, printing expenses, etc.) that need to be reimbursed.
+3. If the government, public institutions, etc., prove the fact of force majeure, and the force majeure fact remains in effect 30 days before the exhibition is held, the organizer shall immediately announce the official cancellation. However, if a participant cancels before the official cancellation announcement, the participation fee shall not be refunded.
+
+Article 16 (Consent to Processing Personal Information)
+1. Participants must agree to the collection and utilization of their personal information and the organizer collects personal information (name, phone number, address, mobile phone number, e-mail, website, SNS address, company name, department, position, and other items) provided when applying for participation.
+2. The organizer may use the collected personal information only for the purpose of promoting the next exhibition, confirming the intention to participate, verifying the participant's identity and communicating notices. If a participant wishes to refuse the use of their personal information, the participant may request to the organizer of the identification, correction, deletion of personal information.
+3. The organizer shall keep the collected personal information for 5 years from the date of provision.
+
+Article 17 (Consent to Use Portrait Rights)
+1. The portrait rights of participants and the image of booth in photographs and videos taken during the exhibition period shall be deemed to have been agreed that they can be used to promote the exhibition. The use of portrait rights is limited to the promotion of this exhibition, including results reports, printed promotional materials, video promotional materials, websites, newsletters, and online SNS platforms etc.
+
+Article 18 (Additional Rules)
+1. Participants must follow the Terms and Conditions of "Busan Illustration Fair V.7" and the regulations of BEXCO.
+2. All rights related to the operation of the exhibition belong to the organizer, and the organizer has all decision-making authority to operate the exhibition safely and efficiently. Participants cannot object to the decision made.
+3. When it is deemed to necessary, organizer shall enact any additional rules that have not been stated in this Terms and Conditions and participants must follow any of additional rules.
+
+Article 19 (Dispute)
+1. If any disputes arise concerning the interpretation of Terms and Conditions between participant and organizer, participant agrees to the competence of the Commercial Arbitration Rules of the Korean Commercial Arbitration Board and shall not bring a law-suit against the ruling.`;
+
   // ═══════════ 페어별 데이터 (예시) ═══════════
   const FAIRS = {
     sif21: {
@@ -678,6 +1020,10 @@
         ['페어스토리 노출', '2026-05-06 14:00', '2027-05-06 14:00', '2026-07-30', '2026-08-02']
       ],
       cancelFees: [[180, 121, 20], [120, 91, 40], [90, 61, 60], [60, 31, 80], [30, 0, 100]],
+      rules: {
+        kr: { pdf: 'sif21_participation_rules_kr.pdf', url: 'https://cdn.ocreo.kr/rules/sif21_participation_rules_kr.pdf', text: '서울일러스트레이션페어V.21 참가규정\n\n전시회(페어) 참가를 원하는 개인 및 기업, 조합, 학교, 기타 단체 등은 본 참가 규정에 동의해야만 참가 신청이 가능합니다.\n\n제1조(용어의 정의)\n1. \'참가 신청자\'라 함은 본 전시회 참가를 위하여 참가 신청서를 제출한 개인 및 기업, 조합, 학교, 기타 단체 등을 말한다.\n(이하 예시 데이터, 실제 규정으로 교체 필요)', edit: '최종 수정: BIBIANA · 2026-02-20 11:00' },
+        en: { pdf: 'sif21_participation_rules_en.pdf', url: 'https://cdn.ocreo.kr/rules/sif21_participation_rules_en.pdf', text: 'The Seoul Illustration Fair V.21 Terms of Participation\n\n(영문 규정 예시 데이터, 실제 규정으로 교체 필요)', edit: '최종 수정: BIBIANA · 2026-02-20 11:05' }
+      },
       booths: {
         krw: {
           personal: [
@@ -747,6 +1093,10 @@
         ['페어스토리 노출', '2026-08-01 14:00', '2027-08-01 14:00', '2026-11-06', '2026-11-08']
       ],
       cancelFees: [[180, 121, 20], [120, 91, 40], [90, 61, 60], [60, 31, 80], [30, 0, 100]],
+      rules: {
+        kr: { pdf: 'bif7_participation_rules_kr.pdf', url: 'https://cdn.ocreo.kr/rules/bif7_participation_rules_kr.pdf', text: RULES_BIF7_KR, edit: '최종 수정: BIBIANA · 2026-06-25 10:30' },
+        en: { pdf: 'bif7_participation_rules_en.pdf', url: 'https://cdn.ocreo.kr/rules/bif7_participation_rules_en.pdf', text: RULES_BIF7_EN, edit: '최종 수정: CHOI · 2026-01-26 (규정 업데이트)' }
+      },
       booths: {
         krw: {
           personal: [
@@ -885,6 +1235,10 @@
         <td><button class="btn btn-blue btn-sm" onclick="openFacility(${i})">수정</button> <button class="btn btn-danger-ghost btn-sm" onclick="openModal('modal-delete')">삭제</button></td>
       </tr>`).join('');
 
+    // 참가 규정
+    fillRules('kr');
+    document.querySelectorAll('#tab-rules .subtab').forEach((el, idx) => el.classList.toggle('active', idx === 0));
+
     // 프로그램
     $('program-rows').innerHTML = fair.programs.map((g, i) => `
       <tr>
@@ -946,6 +1300,19 @@
       const to = new Date(start); to.setDate(to.getDate() - d2);
       out.textContent = `${fmt(from)} ~ ${fmt(to)}`;
     }
+  }
+
+  function fillRules(lang) {
+    const r = FAIRS[currentFair].rules[lang];
+    $('rule-pdf-name').textContent = r.pdf;
+    $('rule-pdf-url').textContent = 'CDN 주소: ' + r.url;
+    $('rule-text').value = r.text;
+    $('rule-lastedit').textContent = r.edit;
+  }
+  function ruleTab(btn, lang) {
+    btn.parentElement.querySelectorAll('.subtab').forEach(el => el.classList.remove('active'));
+    btn.classList.add('active');
+    fillRules(lang);
   }
 
   function openProgram(i) {
