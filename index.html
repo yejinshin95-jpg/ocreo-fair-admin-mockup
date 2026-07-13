@@ -669,16 +669,20 @@
       <div class="field full"><label>조건 유형 <span class="req">*</span></label>
         <select id="promo-cond" class="lk"><option selected>기간 한정 (기간 내 신청 건에 적용)</option><option>대상 조건 (특정 참가자 그룹에 적용)</option></select>
       </div>
+      <div class="field full"><label>기참가 기준 페어</label>
+        <div style="border:1px solid #e5e7eb; border-radius:8px; padding:10px 12px; display:flex; flex-direction:column; gap:8px;">
+          <label style="font-size:13px; display:flex; align-items:center; gap:8px;"><input type="checkbox" checked class="lk"> 서울일러스트레이션페어 v.20 (2025.12)</label>
+          <label style="font-size:13px; display:flex; align-items:center; gap:8px;"><input type="checkbox" checked class="lk"> 부산일러스트레이션페어 v.6 (2025.11)</label>
+          <label style="font-size:13px; display:flex; align-items:center; gap:8px;"><input type="checkbox" class="lk"> 서울일러스트레이션페어 v.19 (2025.07)</label>
+        </div>
+        <span class="hint">대상 조건이 기참가일 때 사용 · 해당 연도에 열린 페어 목록에서 복수 선택 · 선택한 페어 중 하나라도 참가 확정 이력이 있으면 기참가로 판정함</span>
+      </div>
       <div class="field"><label>적용 시작</label><input type="datetime-local" id="promo-start"></div>
       <div class="field"><label>적용 종료</label><input type="datetime-local" id="promo-end"></div>
       <div class="field"><label>최대 적용 건수</label><input id="promo-max"><span class="hint">소진 시 신청서에서 자동 비활성(회색) 처리 · 비우면 무제한</span></div>
       <div class="field"><label>프로모션 옵션</label>
         <select id="promo-group" class="lk"><option selected>부스비 할인 (옵션 안에서는 함께 선택 가능)</option><option>호텔 제공</option><option>(새 옵션 만들기)</option></select>
         <span class="hint">참가자는 옵션 중 1가지만 고를 수 있어요</span>
-      </div>
-      <div class="field"><label>적용 범위</label>
-        <select id="promo-scope"><option selected>국내·해외 전체</option><option>국내 전용 (KRW)</option><option>해외 전용 (USD 외)</option></select>
-        <span class="hint">해외 신청서 노출 여부를 결정해요 (예: 부산 소재 할인은 국내 전용)</span>
       </div>
       <div class="field full">
         <div class="toggle-row">
@@ -1179,9 +1183,12 @@ Article 19 (Dispute)
         { name: '유선 인터넷', desc: '부스 내 유선 인터넷 회선', price: '220,000원', max: '3', auto: false, on: true, edit: '쪼쪼<br>2026-07-02 11:07' },
         { name: '국내 전화선', desc: '부스 내 국내 전화 회선', price: '99,000원', max: '1', auto: false, on: true, edit: '쪼쪼<br>2026-07-02 11:08' }
       ],
-      promos: [
-        { name: '얼리버드 할인', en: 'Early Bird Discount', badge: '', group: '부스비 할인', type: { label: '% 할인', cls: 'chip-rate' }, value: '5%', quota: '210 / 무제한', on: true, edit: '쪼쪼<br>2026-02-25 15:11', m: { v: '5', cond: 0, start: '2026-03-02 14:00', end: '2026-03-08 23:59', max: '', grp: 0, scope: 0, proof: false } },
-        { name: '재참가 작가 할인', badge: '', group: '부스비 할인', type: { label: '금액 할인', cls: 'chip-amount' }, value: '50,000원', quota: '87 / 무제한', on: true, edit: 'BIBIANA<br>2026-02-25 15:20', m: { v: '50,000', cond: 1, start: '', end: '', max: '', grp: 0, scope: 0, proof: false } }
+      promosKr: [
+        { name: '얼리버드 할인', group: '부스비 할인', type: { label: '% 할인', cls: 'chip-rate' }, value: '5%', quota: '210 / 무제한', on: true, edit: '쪼쪼<br>2026-02-25 15:11', m: { v: '5', cond: 0, start: '2026-03-02 14:00', end: '2026-03-08 23:59', max: '', grp: 0, proof: false } },
+        { name: '기참가 작가 할인', group: '부스비 할인', type: { label: '금액 할인', cls: 'chip-amount' }, value: '50,000원', quota: '87 / 무제한', on: true, edit: 'BIBIANA<br>2026-02-25 15:20', m: { v: '50,000', cond: 1, start: '', end: '', max: '', grp: 0, proof: false } }
+      ],
+      promosEn: [
+        { name: 'Early Bird Discount', group: '부스비 할인', type: { label: '% 할인', cls: 'chip-rate' }, value: '5%', quota: '34 / 무제한', on: true, edit: '쪼쪼<br>2026-02-25 15:30', m: { v: '5', cond: 0, start: '2026-03-02 14:00', end: '2026-03-31 23:59', max: '', grp: 0, proof: false } }
       ],
       promoIntro: {
         text: '프로모션은 부스비 할인 옵션 안에서 중복 적용이 가능함.\n*프로모션은 준비된 수량 소진 시 마감됨.',
@@ -1192,7 +1199,7 @@ Article 19 (Dispute)
           guide: {
             title: '부스비 할인 프로모션 (VAT 별도)',
             titleEn: 'Booth Fee Discount (VAT excluded)',
-            body: ['얼리버드 할인 (5%)', '재참가 작가 할인 (50,000원)', '옵션 안에서는 중복 적용 가능함'],
+            body: ['얼리버드 할인 (5%)', '기참가 작가 할인 (50,000원)', '옵션 안에서는 중복 적용 가능함'],
             bodyEn: ['Early-bird discount (5%)', 'Returning artist discount (KRW 50,000)', 'Combinable within this option']
           } }
       ]
@@ -1273,10 +1280,16 @@ Article 19 (Dispute)
         { name: '유선 인터넷', desc: '부스 내 유선 인터넷 회선', price: '220,000원', max: '3', auto: false, on: true, edit: '쪼쪼<br>2026-06-29 14:14' },
         { name: '국내 전화선', desc: '부스 내 국내 전화 회선', price: '99,000원', max: '1', auto: false, on: true, edit: '쪼쪼<br>2026-06-29 14:15' }
       ],
-      promos: [
-        { name: '조기 신청 할인', en: 'Early Bird Discount 10%', badge: '', group: '부스비 할인', type: { label: '% 할인', cls: 'chip-rate' }, value: '10%', quota: '62 / 100', on: true, edit: '쪼쪼<br>2026-06-29 15:00', m: { v: '10', cond: 0, start: '2026-03-02 14:00', end: '2026-04-30 23:59', max: '100', grp: 0, scope: 0, proof: false } },
-        { name: '부산 소재 할인', badge: '증빙 필요', group: '부스비 할인', type: { label: '% 할인', cls: 'chip-rate' }, value: '5%', quota: '— / 무제한', on: true, edit: 'BIBIANA<br>2026-06-29 15:05', m: { v: '5', cond: 1, start: '', end: '', max: '', grp: 0, scope: 1, proof: true } },
-        { name: '호텔 제공 (3박)', en: 'Hotel Accommodation (3 nights)', badge: '유료 옵션 · 부스 타입별 차등', group: '호텔 제공', type: { label: '추가 요금', cls: 'chip-amount' }, value: '+140,000<br>~180,000원', quota: '18 / 40', on: true, edit: '쪼쪼<br>2026-06-29 15:10', m: { v: '140,000~180,000', cond: 0, start: '2026-11-05', end: '2026-11-08', max: '40', grp: 1, scope: 0, proof: false } }
+      promosKr: [
+        { name: '조기 신청 할인', group: '부스비 할인', type: { label: '% 할인', cls: 'chip-rate' }, value: '10%', quota: '62 / 100', on: true, edit: '쪼쪼<br>2026-06-29 15:00', m: { v: '10', cond: 0, start: '2026-03-02 14:00', end: '2026-04-30 23:59', max: '100', grp: 0, proof: false } },
+        { name: '부산 소재 할인', group: '부스비 할인', type: { label: '% 할인', cls: 'chip-rate' }, value: '5%', quota: '— / 무제한', on: true, edit: 'BIBIANA<br>2026-06-29 15:05', m: { v: '5', cond: 1, start: '', end: '', max: '', grp: 0, proof: true } },
+        { name: '기참가 작가 할인', group: '부스비 할인', type: { label: '금액 할인', cls: 'chip-amount' }, value: '50,000원', quota: '41 / 무제한', on: true, edit: 'BIBIANA<br>2026-06-29 15:08', m: { v: '50,000', cond: 1, start: '', end: '', max: '', grp: 0, proof: false } },
+        { name: '호텔 제공 (3박)', group: '호텔 제공', type: { label: '추가 요금', cls: 'chip-amount' }, value: '+140,000<br>~180,000원', quota: '15 / 30', on: true, edit: '쪼쪼<br>2026-06-29 15:10', m: { v: '140,000~180,000', cond: 0, start: '2026-11-05', end: '2026-11-08', max: '30', grp: 1, proof: false } }
+      ],
+      promosEn: [
+        { name: 'Early Bird Discount 10%', group: '부스비 할인', type: { label: '% 할인', cls: 'chip-rate' }, value: '10%', quota: '8 / 20', on: true, edit: '쪼쪼<br>2026-06-29 15:20', m: { v: '10', cond: 0, start: '2026-03-02 14:00', end: '2026-04-30 23:59', max: '20', grp: 0, proof: false } },
+        { name: 'Returning Artist Discount', group: '부스비 할인', type: { label: '금액 할인', cls: 'chip-amount' }, value: 'USD 40', quota: '6 / 무제한', on: true, edit: 'BIBIANA<br>2026-06-29 15:22', m: { v: 'USD 40', cond: 1, start: '', end: '', max: '', grp: 0, proof: false } },
+        { name: 'Hotel Accommodation (3 nights)', group: '호텔 제공', type: { label: '추가 요금', cls: 'chip-amount' }, value: '+USD 140~180', quota: '4 / 10', on: true, edit: '쪼쪼<br>2026-06-29 15:25', m: { v: 'USD 140~180', cond: 0, start: '2026-11-05', end: '2026-11-08', max: '10', grp: 1, proof: false } }
       ],
       promoIntro: {
         text: "본 프로모션은 '부스비 할인'과 '호텔 숙박' 중 1가지만 선택 가능하며, 부스비 할인 옵션 안에서는 중복 적용이 가능함.\n*프로모션은 준비된 수량 소진 시 마감됨.\n*부산 소재를 선택할 경우, 소재 확인 절차가 진행됨.\n*호텔 제공 옵션 선택 시, 별도의 추가 비용이 발생함.",
@@ -1485,10 +1498,11 @@ Article 19 (Dispute)
         <td><button class="btn btn-blue btn-sm" onclick="openProgram(${i})">수정</button> <button class="btn btn-danger-ghost btn-sm" onclick="openModal('modal-delete')">삭제</button></td>
       </tr>`).join('');
 
-    // 프로모션
-    $('promo-rows').innerHTML = fair.promos.map((p, i) => `
+    // 프로모션 (참가자 그룹별 별도 목록)
+    const plist = TABLANG.promo === 'en' ? fair.promosEn : fair.promosKr;
+    $('promo-rows').innerHTML = plist.map((p, i) => `
       <tr>
-        <td>${TABLANG.promo === 'en' && p.m.scope === 1 ? `<strong>${p.name}</strong>` : nameHtml(p.name, p.en, TABLANG.promo)}</td>
+        <td><strong>${p.name}</strong></td>
         <td><span class="chip chip-group">${p.group}</span></td>
         <td><span class="chip ${p.type.cls}">${p.type.label}</span></td>
         <td class="num">${p.value}</td>
@@ -1570,9 +1584,10 @@ Article 19 (Dispute)
 
   function openPromo(i) {
     const isNew = i < 0;
+    const plist = TABLANG.promo === 'en' ? FAIRS[currentFair].promosEn : FAIRS[currentFair].promosKr;
     const p = isNew
-      ? { name: '', type: { label: '% 할인' }, m: { v: '', cond: 0, start: '', end: '', max: '', grp: 0, scope: 0, proof: false }, on: true, edit: '' }
-      : FAIRS[currentFair].promos[i];
+      ? { name: '', type: { label: '% 할인' }, m: { v: '', cond: 0, start: '', end: '', max: '', grp: 0, proof: false }, on: true, edit: '' }
+      : plist[i];
     $('promo-title').textContent = isNew ? '프로모션 추가' : '프로모션 수정';
     $('promo-name').value = p.name;
     $('promo-type-select').selectedIndex = { '% 할인': 0, '금액 할인': 1, '추가 요금': 2 }[p.type.label] ?? 0;
@@ -1582,7 +1597,6 @@ Article 19 (Dispute)
     $('promo-end').value = toDT(p.m.end);
     $('promo-max').value = p.m.max;
     $('promo-group').selectedIndex = p.m.grp;
-    $('promo-scope').selectedIndex = p.m.scope;
     $('promo-proof').classList.toggle('on', !!p.m.proof);
     $('promo-active').classList.toggle('on', !!p.on);
     $('promo-lastedit').textContent = isNew ? '' : '최종 수정: ' + p.edit.replace('<br>', ' · ');
